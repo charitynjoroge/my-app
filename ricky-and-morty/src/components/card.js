@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 function CharacterCard({ character }) {
   const { name, status, species, location, episode, image } = character;
 
-
   return (
     <div className="card">
       <img src={image} alt={name} className="avatar" />
@@ -22,19 +21,13 @@ function CharacterCardList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let allCharacters = [];
-      let page = 1;
-      let totalPages = 1;
-
-      do {
-        const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+      try {
+        const response = await fetch("http://localhost:9000/results");
         const data = await response.json();
-        allCharacters = allCharacters.concat(data.results);
-        totalPages = data.info.pages;
-        page++;
-      } while (page <= totalPages);
-
-      setCharacters(allCharacters);
+        setCharacters(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
@@ -50,4 +43,3 @@ function CharacterCardList() {
 }
 
 export default CharacterCardList;
-
